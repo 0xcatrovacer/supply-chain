@@ -20,8 +20,14 @@ contract Item {
         require(pricePaid == 0, "Item is paid already");
         require(priceInWei == msg.value, "Only full payments allowed");
         pricePaid += msg.value;
-        (bool success, ) = address(parentContract).call{value: msg.value}(abi.encodeWithSignature("triggerPayment(uint256)", index));
-        require(success, "The transaction was not successful, cancelling");
+
+        
+        (bool status , ) = 
+            address(parentContract)
+            .call{value:priceInWei,gas:3000000}
+            (abi.encodeWithSignature("triggerPayment(uint256)",index));
+        
+        require(status, "Payment Unsuccesful Reverting TRXN") ; 
     }
 
     fallback() external {}
