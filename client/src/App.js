@@ -6,7 +6,7 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 
 class App extends Component {
-    state = { loaded: false };
+    state = { loaded: false, cost: 0, itemName: "example_1" };
 
     componentDidMount = async () => {
         try {
@@ -48,18 +48,30 @@ class App extends Component {
         }
         return (
             <div className="App">
-                <h1>Good to Go!</h1>
-                <p>Your Truffle Box is installed and ready.</p>
-                <h2>Smart Contract Example</h2>
-                <p>
-                    If your contracts compiled and migrated successfully, below
-                    will show a stored value of 5 (by default).
-                </p>
-                <p>
-                    Try changing the value stored on <strong>line 42</strong> of
-                    App.js.
-                </p>
-                <div>The stored value is: {this.state.storageValue}</div>
+                <h1>Supply Chain Project</h1>
+                <h2>Items</h2>
+                <h2>Add Items</h2>
+                Cost in Wei:{" "}
+                <input
+                    type="text"
+                    name="cost"
+                    value={this.state.cost}
+                    onChange={(e) => {
+                        this.setState({
+                            [name]: e.target.value,
+                        });
+                    }}
+                />
+                Item Identifier:{" "}
+                <input
+                    type="text"
+                    name="itemName"
+                    value={this.state.cost}
+                    onChange={() => {}}
+                />
+                <button type="button" onClick={this.handleSubmit}>
+                    Create New Item
+                </button>
             </div>
         );
     }
