@@ -48,11 +48,18 @@ class App extends Component {
     };
 
     handleSubmit = async () => {
-        const [cost, itemName] = this.state;
+        const { cost, itemName } = this.state;
 
-        await this.itemManager.methods.createItem(itemName, cost).send({
-            from: this.accounts[0],
-        });
+        const res = await this.itemManager.methods
+            .createItem(itemName, cost)
+            .send({
+                from: this.accounts[0],
+            });
+
+        console.log(res);
+        alert(
+            ` Send ${cost} Wei to ${res.events.SupplyChainStep.returnValues._itemAddress} `
+        );
     };
 
     render() {
@@ -79,8 +86,12 @@ class App extends Component {
                 <input
                     type="text"
                     name="itemName"
-                    value={this.state.cost}
-                    onChange={() => {}}
+                    value={this.state.itemName}
+                    onChange={(e) => {
+                        this.setState({
+                            [e.target.name]: e.target.value,
+                        });
+                    }}
                 />
                 <button type="button" onClick={this.handleSubmit}>
                     Create New Item
