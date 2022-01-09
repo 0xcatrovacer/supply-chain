@@ -24,7 +24,7 @@ contract Item {
         
         (bool status , ) = 
             address(parentContract)
-            .call{value:priceInWei,gas:3000000}
+            .call{value: msg.value}
             (abi.encodeWithSignature("triggerPayment(uint256)",index));
         
         require(status, "Payment Unsuccesful Reverting TRXN") ; 
