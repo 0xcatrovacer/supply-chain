@@ -42,6 +42,14 @@ class App extends Component {
         }
     };
 
+    handleSubmit = async () => {
+        const [cost, itemName] = this.state;
+
+        await this.itemManager.methods.createItem(itemName, cost).send({
+            from: this.accounts[0],
+        });
+    };
+
     render() {
         if (!this.state.loaded) {
             return <div>Loading Web3, accounts, and contract...</div>;
