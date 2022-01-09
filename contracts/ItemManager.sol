@@ -7,13 +7,13 @@ import "./Item.sol";
 
 contract ItemManager is Ownable {
 
-    enum SupplyChainState{Created, Paid, Delivered}
+    enum SupplyChainSteps{Created, Paid, Delivered}
 
     struct S_Item {
         Item _item;
         string _identifier;
         uint _itemPrice;
-        ItemManager.SupplyChainState _state;
+        ItemManager.SupplyChainSteps _step;
     }
 
     mapping (uint => S_Item) public items;
@@ -26,26 +26,26 @@ contract ItemManager is Ownable {
         items[ItemIndex]._item = item;
         items[ItemIndex]._identifier = _identifier;
         items[ItemIndex]._itemPrice = _itemPrice;
-        items[ItemIndex]._state = SupplyChainState.Created;
-        emit SupplyChainStep(ItemIndex, uint(items[ItemIndex]._state), address(items[ItemIndex]._item));
+        items[ItemIndex]._step = SupplyChainSteps.Created;
+        emit SupplyChainStep(ItemIndex, uint(items[ItemIndex]._step), address(items[ItemIndex]._item));
         ItemIndex++;
     }
 
     function triggerPayment(uint _itemIndex) public payable {
 
         require(items[_itemIndex]._itemPrice == msg.value, "Only full payments accepted" );
-        require(items[ItemIndex]._state == SupplyChainState.Created, "Item is further in the chain");
-        items[_itemIndex]._state = SupplyChainState.Paid;
+        require(items[ItemIndex]._step == SupplyChainSteps.Created, "Item is further in the chain");
+        items[_itemIndex]._step = SupplyChainSteps.Paid;
         
-        emit SupplyChainStep(_itemIndex, uint(items[ItemIndex]._state), address(items[_itemIndex]._item));
+        emit SupplyChainStep(_itemIndex, uint(items[ItemIndex]._step), address(items[_itemIndex]._item));
 
     }
 
     function triggerDelivery(uint _itemIndex) public {
-        require(items[_itemIndex]._state == SupplyChainState.Paid, "Item is further in the chain");
-        items[_itemIndex]._state = SupplyChainState.Delivered;
+        require(items[_itemIndex]._step == SupplyChainSteps.Paid, "Item is further in the chain");
+        items[_itemIndex]._step = SupplyChainSteps.Delivered;
 
-        emit SupplyChainStep(_itemIndex, uint(items[ItemIndex]._state), address(items[_itemIndex]._item));
+        emit SupplyChainStep(_itemIndex, uint(items[ItemIndex]._step), address(items[_itemIndex]._item));
     }
 
 }
