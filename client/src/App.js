@@ -6,7 +6,11 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 
 class App extends Component {
-    state = { loaded: false, cost: 0, itemName: "example_1" };
+    state = {
+        loaded: false,
+        cost: 0,
+        itemName: "example_1",
+    };
 
     componentDidMount = async () => {
         try {
@@ -19,15 +23,16 @@ class App extends Component {
             // Get the contract instance.
             this.networkId = await this.web3.eth.net.getId();
 
-            this.itemManager = new web3.eth.Contract(
+            this.itemManager = new this.web3.eth.Contract(
                 ItemManagerContract.abi,
-                ItemManagerContract.networks[networkId] &&
-                    deployedNetwork.address
+                ItemManagerContract.networks[this.networkId] &&
+                    ItemManagerContract.networks[this.networkId].address
             );
 
-            this.item = new web3.eth.Contract(
+            this.item = new this.web3.eth.Contract(
                 ItemContract.abi,
-                ItemContract.networks[networkId] && deployedNetwork.address
+                ItemContract.networks[this.networkId] &&
+                    ItemContract.networks[this.networkId].address
             );
 
             // Set web3, accounts, and contract to the state, and then proceed with an
@@ -66,7 +71,7 @@ class App extends Component {
                     value={this.state.cost}
                     onChange={(e) => {
                         this.setState({
-                            [name]: e.target.value,
+                            [e.target.name]: e.target.value,
                         });
                     }}
                 />
