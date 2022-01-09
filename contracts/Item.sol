@@ -1,6 +1,7 @@
 //SPDX-License-Identifier: MIT
-
 pragma solidity ^0.8.11;
+
+import "./ItemManager.sol";
 
 contract Item {
     uint public priceInWei;
